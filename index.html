@@ -1,494 +1,442 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MD Designer - Your One-Stop Solution for Design & Development</title>
+    <title>MD Designer - Ultra Premium</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
         
-        * {
-            font-family: 'Poppins', sans-serif;
+        * { 
+            font-family: 'Outfit', sans-serif; 
+            cursor: none; /* Hide default cursor for magic cursor */
+        }
+
+        /* 1. PRELOADER STYLES */
+        #preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #0f0c29;
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.5s ease;
+        }
+        .loader-content {
+            text-align: center;
+        }
+        .loader-circle {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(255,255,255,0.1);
+            border-left-color: #a855f7;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+
+        /* 2. MAGIC CURSOR STYLES */
+        .cursor-dot, .cursor-outline {
+            position: fixed;
+            top: 0;
+            left: 0;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            z-index: 9999;
+            pointer-events: none;
+        }
+        .cursor-dot {
+            width: 8px;
+            height: 8px;
+            background-color: white;
+        }
+        .cursor-outline {
+            width: 40px;
+            height: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            transition: width 0.2s, height 0.2s, background-color 0.2s;
+        }
+        body:hover .cursor-outline { opacity: 1; }
+        
+        /* Hover Effect for Cursor */
+        .hover-target:hover ~ .cursor-outline,
+        a:hover ~ .cursor-outline,
+        button:hover ~ .cursor-outline {
+            transform: translate(-50%, -50%) scale(1.5);
+            background-color: rgba(168, 85, 247, 0.2);
+            border-color: transparent;
+        }
+
+        /* Background & Glassmorphism */
+        body {
+            background-color: #0f0c29;
+            color: white;
+            overflow-x: hidden;
         }
         
-        .gradient-text {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+        .animated-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            background: radial-gradient(circle at 50% 50%, #1a1a40 0%, #0f0c29 100%);
         }
-        
-        .hero-gradient {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        }
-        
-        .card-hover {
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
             transition: all 0.3s ease;
         }
-        
-        .card-hover:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+
+        .glass-nav {
+            background: rgba(15, 12, 41, 0.7);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
         }
-        
-        .fade-in {
-            animation: fadeIn 1s ease-in;
+
+        /* Typewriter Cursor */
+        .typing-cursor::after {
+            content: '|';
+            animation: blink 1s step-start infinite;
         }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        .service-card {
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-        }
-        
-        .whatsapp-btn {
-            background: #25D366;
-            transition: all 0.3s ease;
-        }
-        
-        .whatsapp-btn:hover {
-            background: #128C7E;
-            transform: scale(1.05);
-        }
-        
-        .scroll-smooth {
-            scroll-behavior: smooth;
-        }
-        
-        .floating {
-            animation: floating 3s ease-in-out infinite;
-        }
-        
-        @keyframes floating {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-20px); }
-            100% { transform: translateY(0px); }
+        @keyframes blink { 50% { opacity: 0; } }
+
+        /* Neon Glow Text */
+        .neon-text {
+            text-shadow: 0 0 10px rgba(168, 85, 247, 0.5), 0 0 20px rgba(168, 85, 247, 0.3);
         }
     </style>
-</head><a href="https://wa.me/923252400725" target="_blank" 
-   class="fixed bottom-6 right-6 z-[9999] whatsapp-btn text-white w-16 h-16 rounded-full shadow-2xl flex items-center justify-center text-3xl animate-bounce">
-    <i class="fab fa-whatsapp"></i>
-</a>
-<body class="scroll-smooth">
-    <!-- Header Section -->
-    <header class="fixed top-0 w-full bg-white shadow-lg z-50">
-        <nav class="container mx-auto px-4 py-4">
-            <div class="flex justify-between items-center">
-                <div class="flex items-center space-x-2">
-                    <div class="w-10 h-10 hero-gradient rounded-lg flex items-center justify-center">
-                        <span class="text-white font-bold text-xl">MD</span>
-                    </div>
-                    <div>
-                        <h1 class="text-2xl font-bold gradient-text">MB Designer</h1>
-                        <p class="text-xs text-gray-600">Design & Development Hub</p>
-                    </div>
-                </div>
-                <div class="hidden md:flex space-x-6">
-                    <a href="#home" class="text-gray-700 hover:text-purple-600 transition">Home</a>
-                    <a href="#about" class="text-gray-700 hover:text-purple-600 transition">About</a>
-                    <a href="#services" class="text-gray-700 hover:text-purple-600 transition">Services</a>
-                    <a href="#portfolio" class="text-gray-700 hover:text-purple-600 transition">Portfolio</a>
-                    <a href="#contact" class="text-gray-700 hover:text-purple-600 transition">Contact</a>
-                </div>
-                <button id="mobileMenuBtn" class="md:hidden">
-                    <i class="fas fa-bars text-2xl text-gray-700"></i>
-                </button>
-            </div>
-            <div id="mobileMenu" class="hidden md:hidden mt-4 space-y-2">
-                <a href="#home" class="block text-gray-700 hover:text-purple-600 transition py-2">Home</a>
-                <a href="#about" class="block text-gray-700 hover:text-purple-600 transition py-2">About</a>
-                <a href="#services" class="block text-gray-700 hover:text-purple-600 transition py-2">Services</a>
-                <a href="#portfolio" class="block text-gray-700 hover:text-purple-600 transition py-2">Portfolio</a>
-                <a href="#contact" class="block text-gray-700 hover:text-purple-600 transition py-2">Contact</a>
-                
+</head>
+
+<body class="antialiased">
+
+    <div id="preloader">
+        <div class="loader-content">
+            <div class="loader-circle"></div>
+            <h2 class="text-2xl font-bold tracking-widest text-white">MD DESIGNER</h2>
+            <p class="text-purple-400 text-sm mt-2">Loading Creativity...</p>
+        </div>
+    </div>
+
+    <div class="cursor-dot hidden md:block"></div>
+    <div class="cursor-outline hidden md:block"></div>
+
+    <div class="animated-bg">
+        <div class="absolute top-[-10%] left-[-10%] w-96 h-96 bg-purple-600/20 rounded-full blur-[100px] animate-pulse"></div>
+        <div class="absolute bottom-[-10%] right-[-10%] w-96 h-96 bg-blue-600/20 rounded-full blur-[100px] animate-pulse" style="animation-delay: 2s;"></div>
+    </div>
+
+    <header class="fixed top-0 w-full z-50 glass-nav">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="#" class="text-2xl font-bold flex items-center gap-3 group">
+                <img src="https://media-kul2-2.cdn.whatsapp.net/v/t61.24694-24/604363806_858605796983035_4601450964935285604_n.jpg?ccb=11-4&oh=01_Q5Aa3gHivkXeCIuQ1YIaVSd3pGZnb_kxoAaP4JOgX1ZdXZ-PaQ&oe=698ABD4E&_nc_sid=5e03e0&_nc_cat=104.png" alt="Mudasir Ali Logo" class="w-12 h-12 rounded-full shadow-[0_0_15px_rgba(147,51,234,0.5)] group-hover:rotate-12 transition-transform">
+                <span class="tracking-wide">MD Designer</span>
+            </a>
+            
+            <div class="hidden md:flex items-center space-x-8">
+                <a href="#home" class="hover:text-purple-400 transition-colors">Home</a>
+                <a href="#services" class="hover:text-purple-400 transition-colors">Services</a>
+                <a href="#portfolio" class="hover:text-purple-400 transition-colors">Work</a>
+                <a href="https://wa.me/923252400725" class="px-6 py-2 bg-purple-600 rounded-full hover:bg-purple-700 hover:shadow-[0_0_20px_rgba(147,51,234,0.4)] transition-all transform hover:-translate-y-1">
+                    Hire Me
+                </a>
             </div>
         </nav>
     </header>
 
-    <!-- Hero Section -->
-   
-    <section id="home" class="pt-20 min-h-screen flex items-center hero-gradient">
-        <div class="container mx-auto px-4 py-16">
-            <div class="flex flex-col md:flex-row items-center">
-                <div class="md:w-1/2 text-white fade-in">
-                    <h1 class="text-4xl md:text-6xl font-bold mb-4">
-                      <h3 class="text-xl font-bold white-text mb-4">Wellcome To MD Designer!</h3>
-                    </h1>
-                    <p class="text-xl mb-8 text-purple-100">
-                        MD Designer ke saath apne ideas ko haqiqat mein badlein. Hum dete hain top-quality CV making, graphic design, web development, aur YouTube thumbnail services.
-                    </p>
-                    <div class="flex flex-col sm:flex-row gap-4">
-                        <a href="https://wa.me/923252400725" target="_blank" class="whatsapp-btn text-white px-8 py-4 rounded-full font-semibold inline-flex items-center justify-center">
-                            <i class="fab fa-whatsapp mr-2"></i>
-                            Order Now via WhatsApp
-                        </a>
-                        <a href="#portfolio" class="bg-white text-purple-600 px-8 py-4 rounded-full font-semibold hover:bg-gray-100 transition inline-flex items-center justify-center">
-                            View My Work
-                        </a>
-                    </div>
+    <section id="home" class="min-h-screen flex items-center justify-center relative pt-32 md:pt-20">
+        <div class="container mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
+            <div data-aos="fade-right" data-aos-duration="1000" class="order-2 md:order-1">
+                <div class="inline-block px-4 py-1 rounded-full border border-purple-500/30 bg-purple-500/10 text-purple-300 text-sm mb-6">
+                    ✨ Professional Design Services
                 </div>
-                <div class="md:w-1/2 mt-8 md:mt-0 floating">
-                    <img src="https://picsum.photos/seed/designer/600/400" alt="Designer Working" class="rounded-lg shadow-2xl">
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- About Us Section -->
-    <section id="about" class="py-20 bg-gray-50">
-        <div class="container mx-auto px-4">
-            <div class="text-center mb-12">
-                <h2 class="text-4xl font-bold gradient-text mb-4">MD Designer Kaun Hai?</h2>
-            </div>
-            <div class="max-w-4xl mx-auto">
-                <div class="bg-white rounded-2xl shadow-xl p-8 card-hover">
-                    <p class="text-lg text-gray-700 leading-relaxed">
-                        MD Designer ek aisi jagah hai jahan creativity aur technology ka milap hota hai. Hamara maqsad apne clients ko aisi digital services provide karna hai jo unke kaam ko professional aur attractive banayein. Chahe aapko job ke liye ek shandaar CV chahiye ho ya apne YouTube channel ke liye viral thumbnails, hum har kaam ko bari maharat se karte hain. Hum waqt ki pabandi aur quality par kabhi samjhauta nahi karte.
-                    </p>
-                    <div class="mt-8 grid grid-cols-2 md:grid-cols-4 gap-4">
-                        <div class="text-center">
-                            <div class="text-3xl font-bold text-purple-600">100+</div>
-                            <div class="text-gray-600">Projects Done</div>
-                        </div>
-                        <div class="text-center">
-                            <div class="text-3xl font-bold text-purple-600">50+</div>
-                            <div class="text-gray-600">Happy Clients</div>
-                        </div>
-                        <div class="text-center">
-                            <div class="text-3xl font-bold text-purple-600">24/7</div>
-                            <div class="text-gray-600">Support</div>
-                        </div>
-                        <div class="text-center">
-                            <div class="text-3xl font-bold text-purple-600">100%</div>
-                            <div class="text-gray-600">Satisfaction</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Our Services Section -->
-    <section id="services" class="py-20">
-        <div class="container mx-auto px-4">
-            <div class="text-center mb-12">
-                <h2 class="text-4xl font-bold gradient-text mb-4">Hamari Khidmaat</h2>
-                <p class="text-gray-600">Quality services at affordable prices</p>
-            </div>
-            
-            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <!-- CV Making -->
-                <div class="service-card rounded-xl p-6 card-hover">
-                    <div class="w-16 h-16 bg-white rounded-lg flex items-center justify-center mb-4">
-                        <i class="fas fa-file-alt text-3xl text-purple-600"></i>
-                    </div>
-                    <h3 class="text-xl font-bold mb-2">Professional CV Making</h3>
-                    <p class="text-gray-700 mb-4">Ek behtareen CV hi aapke career ka rasta kholti hai. Hum modern, clean, aur ATS-friendly resumes banate hain.</p>
-                    <div class="text-purple-600 font-semibold">Starting from: 300 PKR</div>
-                </div>
-
-                <!-- Graphic Design -->
-                <div class="service-card rounded-xl p-6 card-hover">
-                    <div class="w-16 h-16 bg-white rounded-lg flex items-center justify-center mb-4">
-                        <i class="fas fa-palette text-3xl text-purple-600"></i>
-                    </div>
-                    <h3 class="text-xl font-bold mb-2">Graphic Designing</h3>
-                    <p class="text-gray-700 mb-4">Aapka brand kaisa dikhta hai, yeh bahut zaroori hai. Hum banate hain creative logos, social media posts, flyers.</p>
-                    <div class="text-purple-600 font-semibold">Starting from: 299 PKR</div>
-                </div>
-
-                <!-- Web Development -->
-                <div class="service-card rounded-xl p-6 card-hover">
-                    <div class="w-16 h-16 bg-white rounded-lg flex items-center justify-center mb-4">
-                        <i class="fas fa-code text-3xl text-purple-600"></i>
-                    </div>
-                    <h3 class="text-xl font-bold mb-2">Web Development</h3>
-                    <p class="text-gray-700 mb-4">Digital dour mein website aapka digital office hai. Hum fast-loading, responsive, aur user-friendly websites develop karte hain.</p>
-                    <div class="text-purple-600 font-semibold">Starting from: 500 PKR</div>
-                </div>
-
-                <!-- YouTube Thumbnails -->
-                <div class="service-card rounded-xl p-6 card-hover">
-                    <div class="w-16 h-16 bg-white rounded-lg flex items-center justify-center mb-4">
-                        <i class="fas fa-video text-3xl text-purple-600"></i>
-                    </div>
-                    <h3 class="text-xl font-bold mb-2">YouTube Thumbnail Maker</h3>
-                    <p class="text-gray-700 mb-4">YouTube par views ka sara khel thumbnails ka hota hai. Hum banate hain high-click-through-rate thumbnails.</p>
-                    <div class="text-purple-600 font-semibold">Starting from: 250 PKR</div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Portfolio Section -->
-    <section id="portfolio" class="py-20 bg-gray-50">
-        <div class="container mx-auto px-4">
-            <div class="text-center mb-12">
-                <h2 class="text-4xl font-bold gradient-text mb-4">Mera Pichla Kaam</h2>
-                <p class="text-gray-600">Yahan aap mere kuch behtareen projects dekh sakte hain</p>
-            </div>
-            
-            <div class="grid md:grid-cols-3 gap-6">
-              
-                <!-- CV Sample -->
-                <div class="bg-white rounded-xl overflow-hidden shadow-lg card-hover">
-                    <img src="https://i.pinimg.com/736x/6f/c3/dc/6fc3dc2f6bd7d08c2e73912dc3cb1c64.jpg" alt="CV Sample" class="w-full h-48 object-cover">
-                    <div class="p-4">
-                        <h3 class="font-bold text-lg mb-2">Professional CV Design</h3>
-                        <p class="text-gray-600 text-sm">Modern ATS-friendly resume for IT professionals</p>
-                    </div>
-                </div>
-                <!-- Thumbnail Design -->
-                <div class="bg-white rounded-xl overflow-hidden shadow-lg card-hover">
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTE0wqMgcf-hHy0RQ_nl_vJDQCwENj5zkHdQg&s" alt="Thumbnail" class="w-full h-50 object-cover">
-                    <div class="p-4">
-                        <h3 class="font-bold text-lg mb-2">YouTube Thumbnail</h3>
-                        <p class="text-gray-600 text-sm">High CTR thumbnail for tech review channel</p>
-                    </div>
-                </div>
-
-                <!-- Website -->
-                <div class="bg-white rounded-xl overflow-hidden shadow-lg card-hover">
-                    <img src="https://picsum.photos/seed/web1/400/300" alt="Website" class="w-full h-48 object-cover">
-                    <div class="p-4">
-                        <h3 class="font-bold text-lg mb-2">Business Website</h3>
-                        <p class="text-gray-600 text-sm">Responsive website for local business</p>
-                    </div>
-                </div>
-
-                <!-- Logo Design -->
-                <div class="bg-white rounded-xl overflow-hidden shadow-lg card-hover">
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTsvXfkXUN4TGVdhjauDI7QEnOTpmMlO2yorA&s"alt="Logo" class="w-full h-48 object-cover">
-                    <div class="p-4">
-                        <h3 class="font-bold text-lg mb-2">Logo Design</h3>
-                        <p class="text-gray-600 text-sm">Creative logo for startup company</p>
-                    </div>
-                </div>
-
-                <!-- Social Media Post -->
-                <div class="bg-white rounded-xl overflow-hidden shadow-lg card-hover">
-                    <img src="https://picsum.photos/seed/social1/400/300"alt="Social Media" class="w-full h-48 object-cover">
-                    <div class="p-4">
-                        <h3 class="font-bold text-lg mb-2">Social Media Post</h3>
-                        <p class="text-gray-600 text-sm">Engaging social media graphics</p>
-                    </div>
-                </div>
-
-                <!-- Flyer Design -->
-                <div class="bg-white rounded-xl overflow-hidden shadow-lg card-hover">
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQI9SuCvWozIiYoLIMhwOz8D6_Yqb0xIJSYFw&s"alt="Flyer" class="w-full h-48 object-cover">
-                    <div class="p-4">
-                        <h3 class="font-bold text-lg mb-2">Marketing Flyer</h3>
-                        <p class="text-gray-600 text-sm">Professional flyer for event promotion</p>
-                        <div id="imageModal" class="fixed inset-0 z-[10000] hidden bg-black bg-opacity-90 flex items-center justify-center p-4 cursor-pointer" onclick="closeModal()">
-    <span class="absolute top-10 right-10 text-white text-4xl font-bold">&times;</span>
-    <img id="fullImage" class="max-w-full max-h-full rounded-lg shadow-2xl transform transition-transform duration-300" src="" alt="Full Preview">
-</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Why Choose Us Section -->
-     <section class="py-20 bg-white">
-    <div class="container mx-auto px-4 text-center">
-        <h2 class="text-4xl font-bold gradient-text mb-12">Packages & Pricing</h2>
-        <div class="grid md:grid-cols-3 gap-8">
-            <div class="border rounded-2xl p-8 card-hover border-purple-100 shadow-sm">
-                <h3 class="text-xl font-bold mb-4">Basic Plan</h3>
-                <div class="text-4xl font-bold mb-6 text-purple-600">Rs. 500</div>
-                <ul class="text-gray-600 text-left space-y-3 mb-8">
-                    <li><i class="fas fa-check-circle text-green-500 mr-2"></i> 1 Professional CV</li>
-                    <li><i class="fas fa-check-circle text-green-500 mr-2"></i> 2 YouTube Thumbnails</li>
-                    <li><i class="fas fa-check-circle text-green-500 mr-2"></i> 24h Delivery</li>
-                </ul>
-                <a href="https://wa.me/923252400725" class="block w-full py-3 rounded-xl border-2 border-purple-600 text-purple-600 font-bold hover:bg-purple-600 hover:text-white transition">Choose Basic</a>
-            </div>
-
-            <div class="border-2 rounded-2xl p-8 card-hover border-purple-600 shadow-xl relative scale-105 bg-white">
-                <span class="absolute -top-4 left-1/2 -translate-x-1/2 bg-purple-600 text-white px-4 py-1 rounded-full text-sm">Most Popular</span>
-                <h3 class="text-xl font-bold mb-4">Pro Plan</h3>
-                <div class="text-4xl font-bold mb-6 text-purple-600">Rs. 500</div>
-                <ul class="text-gray-600 text-left space-y-3 mb-8">
-                    <li><i class="fas fa-check-circle text-green-500 mr-2"></i> CV + Portfolio Design</li>
-                    <li><i class="fas fa-check-circle text-green-500 mr-2"></i> Social Media Kit</li>
-                    <li><i class="fas fa-check-circle text-green-500 mr-2"></i> Logo Design (Basic)</li>
-                </ul>
-                <a href="https://wa.me/923252400725" class="block w-full py-3 rounded-xl hero-gradient text-white font-bold hover:opacity-90 transition shadow-lg">Get Started</a>
-            </div>
-
-            <div class="border rounded-2xl p-8 card-hover border-purple-100 shadow-sm">
-                <h3 class="text-xl font-bold mb-4">Business</h3>
-                <div class="text-4xl font-bold mb-6 text-purple-600">Rs. 500</div>
-                <ul class="text-gray-600 text-left space-y-3 mb-8">
-                    <li><i class="fas fa-check-circle text-green-500 mr-2"></i> Full Website Setup</li>
-                    <li><i class="fas fa-check-circle text-green-500 mr-2"></i> Brand Identity</li>
-                    <li><i class="fas fa-check-circle text-green-500 mr-2"></i> Priority Support</li>
-                </ul>
-                <a href="https://wa.me/923252400725" class="block w-full py-3 rounded-xl border-2 border-purple-600 text-purple-600 font-bold hover:bg-purple-600 hover:text-white transition">Choose Business</a>
-            </div>
-        </div>
-    </div>
-</section>
-<section class="py-20 bg-gray-50">
-    <div class="container mx-auto px-4 max-w-3xl">
-        <h2 class="text-3xl font-bold text-center mb-10">Zaroori Sawalat </h2>
-        <div class="space-y-4">
-            <details class="bg-white p-6 rounded-xl shadow-sm cursor-pointer group">
-                <summary class="font-bold flex justify-between items-center list-none">
-                    Kaam kitne time mein mil jayega?
-                    <i class="fas fa-chevron-down text-purple-600 transition group-open:rotate-180"></i>
-                </summary>
-                <p class="mt-4 text-gray-600">Zayada tar kaam (CV, Thumbnails) hum 45 Miniutues ke andar deliver kar dete hain.</p>
-            </details>
-
-            <details class="bg-white p-6 rounded-xl shadow-sm cursor-pointer group">
-                <summary class="font-bold flex justify-between items-center list-none">
-                    Payment ka kya tariqa hai?
-                    <i class="fas fa-chevron-down text-purple-600 transition group-open:rotate-180"></i>
-                </summary>
-                <p class="mt-4 text-gray-600">Hum JazzCash, Easypaisa aur Bank Transfer accept karte hain.</p>
-            </details>
-        </div>
-    </div>
-</section>
-    <section class="py-20">
-        <div class="container mx-auto px-4">
-            <div class="text-center mb-12">
-                <h2 class="text-4xl font-bold gradient-text mb-4"></h2>
-            </div>
-            
-            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
-                <div class="text-center">
-                    <div class="w-20 h-20 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <i class="fas fa-award text-3xl text-purple-600"></i>
-                    </div>
-                    <h3 class="font-bold text-xl md-2">Quality Work</h3>
-                    <p class="text-gray-600">Har project par bariki se kaam</p>
-                </div>
-                
-                <div class="text-center">
-                    <div class="w-20 h-20 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <i class="fas fa-clock text-3xl text-purple-600"></i>
-                    </div>
-                    <h3 class="font-bold text-xl mb-2">Fast Delivery</h3>
-                    <p class="text-gray-600">Aapka kaam waqt par mukammal</p>
-                </div>
-                
-                <div class="text-center">
-                    <div class="w-20 h-20 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <i class="fas fa-tag text-3xl text-purple-600"></i>
-                    </div>
-                    <h3 class="font-bold text-xl mb-2">Affordable Prices</h3>
-                    <p class="text-gray-600">Behtareen kaam, munasib daam mein</p>
-                </div>
-                
-                <div class="text-center">
-                    <div class="w-20 h-20 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <i class="fas fa-headset text-3xl text-purple-600"></i>
-                    </div>
-                    <h3 class="font-bold text-xl mb-2">Customer Support</h3>
-                    <p class="text-gray-600">24/7 WhatsApp raabta</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Call to Action Section -->
-    <section id="contact" class="py-20 hero-gradient">
-        <div class="container mx-auto px-4">
-            <div class="text-center text-white">
-                <h2 class="text-4xl font-bold mb-4">Kya Aap Taiyar Hain?</h2>
-                <p class="text-xl mb-8 max-w-2xl mx-auto">
-                    Aaj hi MB Designer se rabta karein aur apne project ko shuru karwayein.
+                <h1 class="text-5xl md:text-7xl font-bold mb-6 leading-tight">
+                    We Create <br>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600 neon-text typing-cursor" id="typewriter"></span>
+                </h1>
+                <p class="text-gray-400 text-lg mb-8 max-w-lg">
+                    MD Designer apke ideas ko digital reality mein badalta hai. High-end graphics, websites aur branding ka complete solution.
                 </p>
-                
-                <div class="bg-white rounded-2xl p-8 max-w-2xl mx-auto text-gray-800">
-                    <div class="grid md:grid-cols-2 gap-6 mb-8">
-                        <div class="text-center">
-                            <i class="fab fa-whatsapp text-4xl text-green-500 mb-2"></i>
-                            <h3 class="font-bold">WhatsApp</h3>
-                            <p class="text-purple-600 font-semibold">03252400725</p>
-                      
-                    </div>
-                    
-                    <a href="https://wa.me/923252400725" target="_blank" class="whatsapp-btn text-white px-8 py-4 rounded-full font-semibold inline-flex items-center justify-center">
-                        <i class="fab fa-whatsapp mr-2"></i>
-                        Direct Chat on WhatsApp
+                <div class="flex gap-4">
+                    <a href="https://wa.me/923252400725" class="px-8 py-4 bg-white text-black font-bold rounded-full hover:bg-gray-200 transition shadow-[0_0_20px_rgba(255,255,255,0.2)]">
+                        Let's Talk
+                    </a>
+                    <a href="#portfolio" class="px-8 py-4 border border-white/20 rounded-full hover:bg-white/5 transition backdrop-blur-sm">
+                        View Portfolio
                     </a>
                 </div>
             </div>
+            
+            <div class="relative order-1 md:order-2" data-aos="zoom-in" data-aos-duration="1200">
+                <div class="glass-card p-2 rounded-2xl transform rotate-3 hover:rotate-0 transition duration-500" data-tilt>
+                    <img src="https://media-kul2-2.cdn.whatsapp.net/v/t61.24694-24/616806538_2711796425849815_7952122565898180152_n.jpg?ccb=11-4&oh=01_Q5Aa3gHlUybswghzPzgGaL7dEAqBuq0lnAz4aB4A5JJMOOmkTw&oe=698AB40F&_nc_sid=5e03e0&_nc_cat=102.png" alt="Mudasir Ali 3D Logo" class="rounded-xl shadow-2xl w-full object-cover">
+                </div>
+                <div class="absolute -top-10 -right-10 w-20 h-20 bg-gradient-to-br from-pink-500 to-purple-600 rounded-full blur-xl opacity-50 animate-pulse"></div>
+            </div>
         </div>
     </section>
 
-    <!-- Footer -->
-    <footer class="bg-gray-900 text-white py-8">
-        <div class="container mx-auto px-4">
-            <div class="flex flex-col md:flex-row justify-between items-center">
-                <div class="flex items-center space-x-2 mb-4 md:mb-0">
-                    <div class="w-8 h-8 bg-purple-600 rounded-lg flex items-center justify-center">
-                        <span class="text-white font-bold">MD</span>
+    <section id="services" class="py-20">
+        <div class="container mx-auto px-6">
+            <h2 class="text-4xl font-bold text-center mb-16" data-aos="fade-up">Our <span class="text-purple-500">Superpowers</span></h2>
+            
+            <div class="grid md:grid-cols-4 gap-6">
+                <div class="glass-card p-8 rounded-2xl hover:-translate-y-3 transition-transform duration-300 group" data-aos="fade-up" data-aos-delay="0">
+                    <div class="w-14 h-14 bg-purple-500/20 rounded-xl flex items-center justify-center text-2xl text-purple-400 mb-6 group-hover:bg-purple-500 group-hover:text-white transition-colors">
+                        <i class="fas fa-code"></i>
                     </div>
-                    <span class="font-bold">MD Designer</span>
+                    <h3 class="text-xl font-bold mb-2">Web Dev</h3>
+                    <p class="text-gray-400 text-sm">Fast & Responsive websites with modern code.</p>
                 </div>
-                <p class="text-center md:text-right">
-                    © 2026 MB Designer. All Rights Reserved.<br>
-                    Designed with ❤️ by Abubakar Kamran
-                </p>
+
+                <div class="glass-card p-8 rounded-2xl hover:-translate-y-3 transition-transform duration-300 group" data-aos="fade-up" data-aos-delay="100">
+                    <div class="w-14 h-14 bg-pink-500/20 rounded-xl flex items-center justify-center text-2xl text-pink-400 mb-6 group-hover:bg-pink-500 group-hover:text-white transition-colors">
+                        <i class="fas fa-paint-brush"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Graphics</h3>
+                    <p class="text-gray-400 text-sm">Logos, Posters & Social Media branding.</p>
+                </div>
+
+                <div class="glass-card p-8 rounded-2xl hover:-translate-y-3 transition-transform duration-300 group" data-aos="fade-up" data-aos-delay="200">
+                    <div class="w-14 h-14 bg-blue-500/20 rounded-xl flex items-center justify-center text-2xl text-blue-400 mb-6 group-hover:bg-blue-500 group-hover:text-white transition-colors">
+                        <i class="fas fa-video"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Thumbnails</h3>
+                    <p class="text-gray-400 text-sm">Viral YouTube thumbnails designed to click.</p>
+                </div>
+
+                <div class="glass-card p-8 rounded-2xl hover:-translate-y-3 transition-transform duration-300 group" data-aos="fade-up" data-aos-delay="300">
+                    <div class="w-14 h-14 bg-green-500/20 rounded-xl flex items-center justify-center text-2xl text-green-400 mb-6 group-hover:bg-green-500 group-hover:text-white transition-colors">
+                        <i class="fas fa-file-alt"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">CV / Resume</h3>
+                    <p class="text-gray-400 text-sm">ATS Optimized professional resumes.</p>
+                </div>
             </div>
         </div>
+    </section>
+
+    <section class="py-20 relative">
+        <div class="container mx-auto px-6">
+             <h2 class="text-4xl font-bold text-center mb-16" data-aos="fade-up">Our <span class="text-purple-500">Process</span></h2>
+             <div class="grid md:grid-cols-3 gap-8 text-center">
+                 <div class="glass-card p-8 rounded-2xl" data-aos="fade-up" data-aos-delay="0">
+                     <div class="w-16 h-16 bg-purple-600 rounded-full flex items-center justify-center text-3xl font-bold mx-auto mb-6">1</div>
+                     <h3 class="text-xl font-bold mb-4">Consultation</h3>
+                     <p class="text-gray-400">Hum aapki requirements aur goals ko samajhte hain.</p>
+                 </div>
+                 <div class="glass-card p-8 rounded-2xl" data-aos="fade-up" data-aos-delay="100">
+                     <div class="w-16 h-16 bg-purple-600 rounded-full flex items-center justify-center text-3xl font-bold mx-auto mb-6">2</div>
+                     <h3 class="text-xl font-bold mb-4">Creation</h3>
+                     <p class="text-gray-400">Hamari team aapke project par kaam shuru karti hai.</p>
+                 </div>
+                 <div class="glass-card p-8 rounded-2xl" data-aos="fade-up" data-aos-delay="200">
+                     <div class="w-16 h-16 bg-purple-600 rounded-full flex items-center justify-center text-3xl font-bold mx-auto mb-6">3</div>
+                     <h3 class="text-xl font-bold mb-4">Delivery</h3>
+                     <p class="text-gray-400">Project complete karke aapke hawale kiya jata hai.</p>
+                 </div>
+             </div>
+        </div>
+    </section>
+
+
+    <section class="py-20 relative overflow-hidden" id="portfolio">
+        <div class="container mx-auto px-6 relative z-10">
+            <h2 class="text-4xl font-bold text-center mb-16" data-aos="fade-up">Simple <span class="text-purple-500">Pricing</span></h2>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="glass-card p-8 rounded-3xl" data-aos="fade-right">
+                    <h3 class="text-xl font-bold text-gray-400">Starter</h3>
+                    <div class="text-3xl font-bold my-4">Rs. 500</div>
+                    <ul class="space-y-3 text-sm text-gray-300 mb-8">
+                        <li>✓ 1 Professional CV</li>
+                        <li>✓ 2 Thumbnails</li>
+                        <li>✓ 24 Hours Delivery</li>
+                    </ul>
+                    <a href="https://wa.me/923252400725" class="block w-full py-3 text-center border border-purple-500 rounded-xl hover:bg-purple-500/20 transition">Select</a>
+                </div>
+
+                <div class="glass-card p-8 rounded-3xl border-purple-500 relative transform md:-translate-y-4 shadow-[0_0_30px_rgba(147,51,234,0.15)] bg-gradient-to-b from-purple-900/40 to-transparent" data-aos="zoom-in">
+                    <div class="absolute top-0 right-0 bg-purple-600 text-xs font-bold px-3 py-1 rounded-bl-xl rounded-tr-xl">POPULAR</div>
+                    <h3 class="text-xl font-bold text-purple-400">Pro Bundle</h3>
+                    <div class="text-4xl font-bold my-4">Rs. 1000</div>
+                    <ul class="space-y-3 text-sm text-gray-300 mb-8">
+                        <li>✓ CV + Portfolio Link</li>
+                        <li>✓ Social Media Kit</li>
+                        <li>✓ 3 Revisions</li>
+                        <li>✓ Priority Support</li>
+                    </ul>
+                    <a href="https://wa.me/923252400725" class="block w-full py-3 text-center bg-purple-600 rounded-xl font-bold hover:bg-purple-700 hover:shadow-lg transition">Get Started</a>
+                </div>
+
+                <div class="glass-card p-8 rounded-3xl" data-aos="fade-left">
+                    <h3 class="text-xl font-bold text-gray-400">Business</h3>
+                    <div class="text-3xl font-bold my-4">Custom</div>
+                    <ul class="space-y-3 text-sm text-gray-300 mb-8">
+                        <li>✓ Full Website Dev</li>
+                        <li>✓ Complete Branding</li>
+                        <li>✓ SEO Optimization</li>
+                    </ul>
+                    <a href="https://wa.me/923252400725" class="block w-full py-3 text-center border border-purple-500 rounded-xl hover:bg-purple-500/20 transition">Contact Us</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-20 relative">
+        <div class="container mx-auto px-6">
+             <h2 class="text-4xl font-bold text-center mb-16" data-aos="fade-up">What Clients <span class="text-purple-500">Say</span></h2>
+             <div class="grid md:grid-cols-2 gap-8">
+                 <div class="glass-card p-8 rounded-2xl relative" data-aos="fade-right">
+                     <i class="fas fa-quote-left text-4xl text-purple-600 absolute top-4 left-4 opacity-30"></i>
+                     <p class="text-gray-300 mb-6 pl-8">"MD Designer ne meri CV ko next level par phoncha diya. Mujhe pehle hi haftay mein 3 interviews ki calls aayin. Highly recommended!"</p>
+                     <div class="flex items-center">
+                         <div class="w-12 h-12 bg-gray-600 rounded-full mr-4"></div>
+                         <div>
+                             <h4 class="font-bold">Ahmed Khan</h4>
+                             <p class="text-sm text-gray-400">Software Engineer</p>
+                         </div>
+                     </div>
+                 </div>
+                 <div class="glass-card p-8 rounded-2xl relative" data-aos="fade-left">
+                     <i class="fas fa-quote-left text-4xl text-purple-600 absolute top-4 left-4 opacity-30"></i>
+                     <p class="text-gray-300 mb-6 pl-8">"Mere YouTube channel ke liye thumbnails ka kaam diya tha. CTR double ho gaya hai. Bohat hi professional aur timely service hai."</p>
+                     <div class="flex items-center">
+                         <div class="w-12 h-12 bg-gray-600 rounded-full mr-4"></div>
+                         <div>
+                             <h4 class="font-bold">Sara Ali</h4>
+                             <p class="text-sm text-gray-400">YouTuber</p>
+                         </div>
+                     </div>
+                 </div>
+             </div>
+        </div>
+    </section>
+
+
+    <footer class="py-10 border-t border-white/10 text-center text-gray-400">
+        <p>© 2026 MD Designer. All Rights Reserved.</p>
+        <p class="mt-2 text-sm">Made By <span class="text-purple-400 font-bold">Abubakar Kamran</span></p>
     </footer>
 
+    <a href="https://wa.me/923252400725" class="fixed bottom-8 right-8 bg-green-500 text-white w-14 h-14 rounded-full flex items-center justify-center text-2xl shadow-lg hover:scale-110 transition z-40">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <audio id="clickSound" src="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3" preload="auto"></audio>
+
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.7.0/vanilla-tilt.min.js"></script>
+    
     <script>
-        // Mobile Menu Toggle
-        document.getElementById('mobileMenuBtn').addEventListener('click', function() {
-            const menu = document.getElementById('mobileMenu');
-            menu.classList.toggle('hidden');
+        // 1. Remove Loader on Load
+        window.addEventListener('load', () => {
+            const loader = document.getElementById('preloader');
+            loader.style.opacity = '0';
+            setTimeout(() => {
+                loader.style.display = 'none';
+            }, 500);
         });
 
-        // Smooth Scroll for Navigation Links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                    // Close mobile menu if open
-                    document.getElementById('mobileMenu').classList.add('hidden');
-                }
+        // 2. Initialize AOS Animation
+        AOS.init({
+            offset: 100,
+            duration: 1000,
+            once: true
+        });
+
+        // 3. Initialize Tilt Effect
+        VanillaTilt.init(document.querySelectorAll("[data-tilt]"), {
+            max: 15,
+            speed: 400,
+            glare: true,
+            "max-glare": 0.2
+        });
+
+        // 4. Custom Magic Cursor
+        const cursorDot = document.querySelector('.cursor-dot');
+        const cursorOutline = document.querySelector('.cursor-outline');
+
+        window.addEventListener('mousemove', (e) => {
+            const posX = e.clientX;
+            const posY = e.clientY;
+
+            cursorDot.style.left = `${posX}px`;
+            cursorDot.style.top = `${posY}px`;
+
+            // Add delay to outline for smoother effect
+            cursorOutline.animate({
+                left: `${posX}px`,
+                top: `${posY}px`
+            }, { duration: 500, fill: "forwards" });
+        });
+
+        // Hover scale effect
+        document.querySelectorAll('a, button, .glass-card').forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                cursorOutline.style.transform = 'translate(-50%, -50%) scale(1.5)';
+                cursorOutline.style.backgroundColor = 'rgba(168, 85, 247, 0.1)';
+            });
+            el.addEventListener('mouseleave', () => {
+                cursorOutline.style.transform = 'translate(-50%, -50%) scale(1)';
+                cursorOutline.style.backgroundColor = 'transparent';
             });
         });
 
-        // Add animation on scroll
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
+        // 5. Typewriter Effect
+        const words = ["Websites", "Logos", "Thumbnails", "Brands", "Futures"];
+        let i = 0;
+        let timer;
 
-        const observer = new IntersectionObserver(function(entries) {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('fade-in');
-                }
-            });
-        }, observerOptions);
+        function typeWriter() {
+            const heading = document.getElementById('typewriter');
+            const word = words[i];
+            let currentText = heading.innerText;
+            
+            if (currentText.length < word.length) {
+                heading.innerText = word.substring(0, currentText.length + 1);
+                timer = setTimeout(typeWriter, 150);
+            } else {
+                setTimeout(deleteWriter, 2000); // Wait before deleting
+            }
+        }
 
-        document.querySelectorAll('.card-hover').forEach(el => {
-            observer.observe(el);
+        function deleteWriter() {
+            const heading = document.getElementById('typewriter');
+            let currentText = heading.innerText;
+            
+            if (currentText.length > 0) {
+                heading.innerText = currentText.substring(0, currentText.length - 1);
+                timer = setTimeout(deleteWriter, 100);
+            } else {
+                i = (i + 1) % words.length;
+                setTimeout(typeWriter, 500);
+            }
+        }
+
+        // Start typewriter
+        typeWriter();
+
+        // 6. CLICK SOUND EFFECT
+        const clickSound = document.getElementById('clickSound');
+        document.addEventListener('click', () => {
+            clickSound.currentTime = 0; // Reset sound to start
+            clickSound.play();
         });
     </script>
 </body>
-
 </html>
-
-
-
